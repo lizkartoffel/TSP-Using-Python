@@ -135,6 +135,9 @@ def init_db():
         cursor.executemany('INSERT INTO cities (name, lat, lon) VALUES (?, ?, ?)', cities)
         conn.commit()
 
+    else:
+        print("Cities already exist in the database.")
+
 
 def get_cities():
     conn = sqlite3.connect('cities.db')
