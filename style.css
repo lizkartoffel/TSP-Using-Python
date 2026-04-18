@@ -1,0 +1,56 @@
+*{
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+
+}
+
+#load-cities-btn {
+
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#solve-btn {
+    align-items: center;
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+h1 {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #007BFF;
+
+
+}
+
+#tsp-canvas {
+    display: block;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;    
+    gap: 20px;  
+    margin: 20px 0;
+}
