@@ -26,6 +26,8 @@ def solve_tsp(cities, population_size=200, generations=1000, mutation_prob=0.2):
 
     population = toolbox.population(n=population_size)
 
+    history = []   
+
     for gen in range(generations):
         offspring = toolbox.select(population, len(population))
         offspring = list(map(toolbox.clone, offspring))
@@ -48,11 +50,17 @@ def solve_tsp(cities, population_size=200, generations=1000, mutation_prob=0.2):
 
         population[:] = offspring
 
-    best_individual = tools.selBest(population, 1)[0]
-    best_route = [cities[i] for i in best_individual]
-    best_distance = calculate_distance(best_route)
+        best_individual = tools.selBest(population, 1)[0]
+        best_route = [cities[i] for i in best_individual]
+        best_distance = calculate_distance(best_route)
 
-    return best_route, best_distance
+        history.append({'route': best_route, 'distance': best_distance})
+
+    final_best_individual = tools.selBest(population, 1)[0]
+    final_best_route = [cities[i] for i in final_best_individual]
+    final_best_distance = calculate_distance(final_best_route)
+
+    return final_best_route, final_best_distance, history
     
 
 def haversine(lat1, lon1, lat2, lon2):

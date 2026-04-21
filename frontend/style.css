@@ -46,6 +46,7 @@ h1 {
     display: block;
     margin: 20px auto;
     border: 1px solid #ccc;
+    background-color: rgb(224, 253, 255);
 }
 
 .buttons-container {

@@ -7,11 +7,8 @@ document.getElementById('load-cities-btn').addEventListener('click', async () =>
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        // Moved inside the try block!
         const data = await response.json();
         
-        // Safeguard: If backend returns { cities: [...] }, use data.cities. 
-        // If it just returns [...], use data directly.
         CurrentCities = data.cities || data;
 
         const canvas = document.getElementById('tsp-canvas');
@@ -30,27 +27,47 @@ document.getElementById('load-cities-btn').addEventListener('click', async () =>
         drawCities(CurrentCities);
         
     } catch (error) {
-        // This will now catch network errors AND any JSON parsing errors
         console.error("Failed to load cities:", error);
         alert(error.message);
     }
 });
+
+
 document.getElementById('solve-btn').addEventListener('click', async () => {
+    try {
     const response = await fetch('/api/solve', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ cities: CurrentCities })
-    });
+        headers: {'Content-Type': 'application/json'},body: JSON.stringify({ cities: CurrentCities })});
+
+    
     const result = await response.json();
-    console.log("Best route:", result.route);
+    const history = result.history || [];
+    console.log("received route:",history.length);
+    
+    let current_generation = 0;
+    const interval = setInterval(() => {
+        if (current_generation >= history.length) {
+            clearInterval(interval);
+            console.log(current_generation, history.length);
+            return;
+        }
+        const genResult = history[current_generation];
+
     // Map route to include x,y for drawing
-    const routeWithCoords = result.route.map(city => {
-        const match = CurrentCities.find(c => c.lat === city.lat && c.lon === city.lon);
+
+    const routeWithCoords = genResult.route.map(city => {
+        const match = CurrentCities.find(c => c.name === city.name);
+        if (!match) { console.error(city,name +"not found in current cities");}
         return { ...city, x: match.x, y: match.y };
     });
     drawRoute(routeWithCoords);
+        current_generation++;
+    }, 100);
+}
+catch (error) {
+    console.error("Failed to solve TSP:", error);
+    alert(error.message);
+}
 });
 
 
@@ -84,7 +101,6 @@ function drawRoute(route) {
             ctx.stroke();
         }   
     });
-    // Connect last city to first to complete the loop
     const firstCity = route[0];
     const lastCity = route[route.length - 1];
     ctx.beginPath();

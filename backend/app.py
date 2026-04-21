@@ -19,11 +19,20 @@ def solve():
     try:
         data = request.json
         cities = data.get('cities', [])
+
         if not cities:
             return jsonify({'error': 'No cities provided'}), 400
-        best_route, best_distance = solve_tsp(cities)
+        best_route, best_distance, route_history = solve_tsp(cities, generations=200)
 
-        return jsonify({'route': best_route, 'distance': best_distance})
+        return jsonify({'route': best_route, 'distance': best_distance, 'history': route_history})
+
+        route_history =[];
+        for gen in range(1000):
+            best_route, best_distance = solve_tsp(cities, generations=gen)
+            route_history.append({'route': best_route, 'distance': best_distance})
+
+
+        return jsonify({'route': best_route, 'distance': best_distance, 'history': route_history})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

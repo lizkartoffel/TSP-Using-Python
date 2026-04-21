@@ -1,7 +1,7 @@
 import sqlite3
 
 def init_db():
-    conn = sqlite3.connect('cities.db')
+    conn = sqlite3.connect('backend/cities.db')
     cursor = conn.cursor()
 
     cursor.execute('DROP TABLE IF EXISTS cities')
